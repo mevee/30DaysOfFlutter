@@ -9,6 +9,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String _pageTitle = "";
   bool isChanged = false;
+
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -19,101 +21,135 @@ class _LoginPageState extends State<LoginPage> {
     return Material(
       color: Colors.white,
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Image.asset(
-              "assets/images/login_img.png",
-              fit: BoxFit.cover,
-              // height: 500,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "$_pageTitle",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-                textScaleFactor: 1.0,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Image.asset(
+                "assets/images/hey.png",
+                fit: BoxFit.cover,
+                // height: 500,
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-              child: Column(
-                children: [
-                  TextFormField(
-                    onChanged: (value) {
-                      setState(() {
-                        _pageTitle = "Wellcome $value";
-                      });
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Enter email",
-                      labelText: "Email",
-                    ),
-                  ),
-                  TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: "Enter password",
-                      labelText: "Password",
-                    ),
-                  ),
-                ],
+              SizedBox(
+                height: 20,
               ),
-            ),
-            SizedBox(
-              height: 40.0,
-            ),
-            InkWell(
-              onTap: () async{
-                isChanged = true;
-                setState(() {});
-
-                await Future.delayed(Duration(seconds: 1));
-                Navigator.pushNamed(context, MyRoutes.home);
-              },
-              child: AnimatedContainer(
-                duration: Duration(seconds: 1),
-                alignment: Alignment.center,
-                width: isChanged ? 50 : 150,
-                height: 50,
-                child: isChanged
-                    ? Icon(Icons.done, color: Colors.white)
-                    : Text(
-                        "Login",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Wellcome $_pageTitle",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  textScaleFactor: 1.0,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 32.0),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      onChanged: (value) {
+                        setState(() {
+                          _pageTitle = "$value";
+                        });
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Email con't be empty";
+                        } else if (!value.contains("@")) {
+                          return "Valid email required";
+                        } else
+                          return null;
+                      },
+                      decoration: InputDecoration(
+                        hintText: "Enter email",
+                        labelText: "Email",
                       ),
-                decoration: BoxDecoration(
-                    color: Colors.deepPurple,
-                    // shape: isChanged ? BoxShape.circle : BoxShape.circle,
-                    borderRadius: BorderRadius.circular(isChanged ? 50 : 8)),
+                    ),
+                    TextFormField(
+                      obscureText: true,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Password con't be empty";
+                        } else if (value.length < 6) {
+                          return "password must be min of 6 character";
+                        } else
+                          return null;
+                      },
+                      decoration: InputDecoration(
+                        hintText: "Enter password",
+                        labelText: "Password",
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              SizedBox(
+                height: 40.0,
+              ),
+              Material(
+                color: Colors.deepPurple,
+                borderRadius: BorderRadius.circular(isChanged ? 50 : 8),
+                child: InkWell(
+                  onTap: () async {
+                    validateAllFields(context);
+                  },
+                  child: AnimatedContainer(
+                    duration: Duration(seconds: 1),
+                    alignment: Alignment.center,
+                    width: isChanged ? 50 : 150,
+                    height: 50,
+                    child: isChanged
+                        ? Icon(Icons.done, color: Colors.white)
+                        : Text(
+                            "Login",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                    // decoration: BoxDecoration(
+                    //   color: Colors.deepPurple,
+                    //   // shape: isChanged ? BoxShape.circle : BoxShape.circle,
+                    //   borderRadius: BorderRadius.circular(isChanged ? 50 : 8),
+                    // ),
+                  ),
+                ),
+              ),
 
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.pushNamed(context, MyRoutes.home);
-            //     // Navigator.pop(context);
-            //   },
-            //   child: Text("Login"),
-            //   style: TextButton.styleFrom(minimumSize: Size(150, 40)),
-            // ),
-          ],
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.pushNamed(context, MyRoutes.home);
+              //     // Navigator.pop(context);
+              //   },
+              //   child: Text("Login"),
+              //   style: TextButton.styleFrom(minimumSize: Size(150, 40)),
+              // ),
+            ],
+          ),
         ),
       ),
       // drawer: Drawer(),
     );
+  }
+
+  void validateAllFields(BuildContext context) async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+
+    isChanged = true;
+    setState(() {});
+
+    await Future.delayed(Duration(seconds: 1));
+    await Navigator.pushNamed(context, MyRoutes.home);
+    isChanged = false;
+    setState(() {});
   }
 }
