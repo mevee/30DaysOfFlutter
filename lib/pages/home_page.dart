@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:test2/widgets/drawer.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -15,7 +16,7 @@ class HomePage extends StatelessWidget {
         "Wellcome to 30 days of Flutter",
         style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
       )),
-      // drawer: Drawer(),
+      drawer: MyDrawer(),
     );
   }
 }
