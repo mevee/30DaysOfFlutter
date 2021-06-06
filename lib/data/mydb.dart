@@ -1,24 +1,20 @@
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:test2/models/product.dart';
 
 class MyDatabase {
-  List<Product> getProductList() {
-    final productList = [
-      Product(
-        id: "01130",
-        productname: "os gunoi inox 7 litri",
-        sellername: "addidas Sneaker",
-        imageurl:
-            "https://www.allinro.ro/uploads/productimages/p_494983417670.jpg",
-        productMrp: "45.00",
-        isFav: 1,
-        discountPercent: "10",
-        qty: "1",
-        itemincart: 1,
-        productSellingprice: "45.00",
-        sizeId: "45.00",
-        totalRating: 5.0,
-      )
-    ];
-    return productList;
+  List<Product> dataList;
+
+  void getProductList() async {
+    _loadData();
+  }
+
+  void _loadData() async {
+    final catalogJson = await rootBundle.loadString("assets/files/product.json");
+    final decodedData = jsonDecode(catalogJson);
+    var productsData = decodedData["product"];
+    dataList = List.from(productsData)
+        .map<Product>((item) => Product.fromMap(item))
+        .toList();
   }
 }
