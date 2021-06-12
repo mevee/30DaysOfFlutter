@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:test2/models/product.dart';
 
@@ -14,38 +12,49 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.all(2),
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       child: Column(
         children: [
           SizedBox(
             height: 6.0,
             width: 6.06,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                "Stock : ${product.qty}",
-                style: TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "Stock : ${product.qty}",
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Text(
-                "Off : ${product.discountPercent}%",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
+                Text(
+                  "Off : ${product.discountPercent}%",
+                  style: TextStyle(
+                    color: Colors.green[200],
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          Container(
-            height: 160.00,
-            width: double.infinity,
-            child: Image.network(
-              product.imageurl,
-              // fit: BoxFit.cover,
+          Hero(
+            tag: product.id,
+            child: Container(
+              height: 160.00,
+              margin: EdgeInsets.all(6.0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  color: Theme.of(context).canvasColor,
+                  shape: BoxShape.rectangle),
+              width: double.infinity,
+              child: Image.network(
+                product.imageurl,
+                fit: BoxFit.fill,
+              ),
             ),
           ),
           Expanded(
@@ -81,7 +90,7 @@ class ProductItem extends StatelessWidget {
                 " \$${product.productMrp}",
                 textScaleFactor: 1.2,
                 style: TextStyle(
-                  color: Colors.purple,
+                  color: Theme.of(context).buttonColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -91,8 +100,8 @@ class ProductItem extends StatelessWidget {
               Text(
                 "\$${product.productSellingprice}",
                 style: TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.lineThrough,
+                  fontWeight: FontWeight.normal,
                 ),
               ),
             ],
@@ -101,19 +110,17 @@ class ProductItem extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          MaterialButton(
-            padding: EdgeInsets.all(1.0),
-            height: 40,
-            minWidth: 120,
-            color: Colors.lightBlueAccent,
+          ElevatedButton(
             onPressed: () {},
             child: Text(
               "Add to cart",
               style: TextStyle(
-                color: Colors.black,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            style:
+                ButtonStyle(shape: MaterialStateProperty.all(StadiumBorder())),
           ),
           SizedBox(
             height: 10,

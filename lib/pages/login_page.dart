@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white,
+      color: Theme.of(context).canvasColor,
       child: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -38,10 +38,11 @@ class _LoginPageState extends State<LoginPage> {
                 child: Text(
                   "Wellcome $_pageTitle",
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Theme.of(context).buttonColor,
                       fontSize: 28,
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
+                  maxLines: 1,
                   textScaleFactor: 1.0,
                 ),
               ),
@@ -94,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 40.0,
               ),
               Material(
-                color: Colors.deepPurple,
+                color: Theme.of(context).buttonColor,
                 borderRadius: BorderRadius.circular(isChanged ? 50 : 8),
                 child: InkWell(
                   onTap: () async {
@@ -114,11 +115,6 @@ class _LoginPageState extends State<LoginPage> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
-                    // decoration: BoxDecoration(
-                    //   color: Colors.deepPurple,
-                    //   // shape: isChanged ? BoxShape.circle : BoxShape.circle,
-                    //   borderRadius: BorderRadius.circular(isChanged ? 50 : 8),
-                    // ),
                   ),
                 ),
               ),
